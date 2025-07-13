@@ -16,7 +16,5 @@ llama_model_path = {
     "7b_chat": "meta-llama/Llama-2-7b-chat-hf",
     "13b": "meta-llama/Llama-2-13b-hf",
     "13b_chat": "meta-llama/Llama-2-13b-chat-hf",
-    "TheBloke": "TheBloke/Llama-2-7B-GPTQ",
     "TinyLlama": "TinyLlama/TinyLlama_v1.1",
-    "TinyPixel": "TinyPixel/small-llama2",
 }
