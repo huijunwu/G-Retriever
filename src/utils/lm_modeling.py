@@ -7,7 +7,8 @@ from transformers import AutoModel, AutoTokenizer
 from torch.utils.data import DataLoader
 import numpy as np
 
-pretrained_repo = 'sentence-transformers/all-roberta-large-v1'
+# pretrained_repo = 'sentence-transformers/all-roberta-large-v1'
+pretrained_repo = 'sentence-transformers/all-MiniLM-L6-v2'
 batch_size = 1024  # Adjust the batch size as needed
 
 
@@ -109,7 +110,8 @@ def load_sbert():
 
 def sber_text2embedding(model, tokenizer, device, text):
     if len(text) == 0:
-        return torch.zeros((0, 1024))
+        # return torch.zeros((0, 1024))
+        return torch.zeros((0, 384))
 
     encoding = tokenizer(text, padding=True, truncation=True, return_tensors='pt')
     dataset = Dataset(input_ids=encoding.input_ids, attention_mask=encoding.attention_mask)
@@ -172,7 +174,8 @@ def contriever_text2embedding(model, tokenizer, device, text):
                 all_embeddings.append(embeddings)
             all_embeddings = torch.cat(all_embeddings, dim=0).cpu()
     except:
-        all_embeddings = torch.zeros((0, 1024))
+        # all_embeddings = torch.zeros((0, 1024))
+        all_embeddings = torch.zeros((0, 384))
 
     return all_embeddings
 
