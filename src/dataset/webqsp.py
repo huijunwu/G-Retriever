@@ -24,7 +24,7 @@ class WebQSPDataset(Dataset):
         self.graph_type = 'Knowledge Graph'
         dataset = datasets.load_dataset("rmanluo/RoG-webqsp")
         self.dataset = datasets.concatenate_datasets([dataset['train'], dataset['validation'], dataset['test']])
-        self.q_embs = torch.load(f'{path}/q_embs.pt')
+        self.q_embs = torch.load(f'{path}/q_embs.pt', weights_only=False)
 
     def __len__(self):
         """Return the len of the dataset."""
@@ -33,7 +33,7 @@ class WebQSPDataset(Dataset):
     def __getitem__(self, index):
         data = self.dataset[index]
         question = f'Question: {data["question"]}\nAnswer: '
-        graph = torch.load(f'{cached_graph}/{index}.pt')
+        graph = torch.load(f'{cached_graph}/{index}.pt', weights_only=False)
         desc = open(f'{cached_desc}/{index}.txt', 'r').read()
         label = ('|').join(data['answer']).lower()
 
@@ -64,7 +64,7 @@ def preprocess():
     dataset = datasets.load_dataset("rmanluo/RoG-webqsp")
     dataset = datasets.concatenate_datasets([dataset['train'], dataset['validation'], dataset['test']])
 
-    q_embs = torch.load(f'{path}/q_embs.pt')
+    q_embs = torch.load(f'{path}/q_embs.pt', weights_only=False)
     for index in tqdm(range(len(dataset))):
         if os.path.exists(f'{cached_graph}/{index}.pt'):
             continue
@@ -74,7 +74,7 @@ def preprocess():
         if len(nodes) == 0:
             print(f'Empty graph at index {index}')
             continue
-        graph = torch.load(f'{path_graphs}/{index}.pt')
+        graph = torch.load(f'{path_graphs}/{index}.pt', weights_only=False)
         q_emb = q_embs[index]
         subg, desc = retrieval_via_pcst(graph, q_emb, nodes, edges, topk=3, topk_e=5, cost_e=0.5)
         torch.save(subg, f'{cached_graph}/{index}.pt')
